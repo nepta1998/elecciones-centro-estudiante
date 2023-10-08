@@ -1,1 +1,1 @@
-# elecciones-centro-estudiante
+# Elecciones para el centro de estudiante
