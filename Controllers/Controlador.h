@@ -41,7 +41,7 @@ public:
   // Estudiante Cola metodos
   void InsertarEstudianteCola();
   void ConsultarEstudianteCola();
-  void ProcessEstudianteCola();
+  void ProcesarEstudianteCola();
   void EliminarEstudianteCola();
 
   // reportes

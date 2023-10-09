@@ -115,8 +115,9 @@ void Controlador::OpcionEstudianteCola() {
     vg.ImprimirMensaje("   1. Consultar estudiante en la cola.\n");
     vg.ImprimirMensaje("   2. Agregar estudiante a la cola.\n");
     vg.ImprimirMensaje("   3. Eliminar  estudiante de la cola.\n");
-    vg.ImprimirMensaje("   4. Volver al menú anterior.\n");
-    opc = vg.LeerValidarNro("   Seleccione su opción (1-4): ", 1, 4);
+    vg.ImprimirMensaje("   4. Procesar  estudiante de la cola.\n");
+    vg.ImprimirMensaje("   5. Procesar Estudiante.\n");
+    opc = vg.LeerValidarNro("   Seleccione su opción (1-5): ", 1, 5);
     switch (opc) {
     case 1:
       this->ConsultarEstudianteCola();
@@ -128,21 +129,45 @@ void Controlador::OpcionEstudianteCola() {
       this->EliminarEstudianteCola();
       break;
     case 4:
+      this->ProcesarEstudianteCola();
+      break;
+    case 5:
+      Menu();
+      break;
+    }
+  } while (opc != 5);
+}
+// Opcion reportes
+void Controlador::OpcionReportes() {
+  int opc;
+  VGeneral vg;
+  // vg.Pausa();
+  do {
+    vg.Limpiar();
+    vg.ImprimirLineasBlanco(2);
+    vg.Limpiar();
+    vg.ImprimirEncabezado("\n      M E N U  E S T U D I A N T E  C O L A\n",
+                          "      =======  ===============");
+    vg.ImprimirMensaje("   1. Consultar estudiante en la cola.\n");
+    vg.ImprimirMensaje("   2. Agregar estudiante a la cola.\n");
+    vg.ImprimirMensaje("   3. Eliminar  estudiante de la cola.\n");
+    vg.ImprimirMensaje("   4. Volver al menú anterior.\n");
+    opc = vg.LeerValidarNro("   Seleccione su opción (1-4): ", 1, 4);
+    switch (opc) {
+    case 1:
+      this->EstudiantesVotosPorMesa();
+      break;
+    case 2:
+      this->EstudantesQueVotaron();
+      break;
+    case 3:
+      this->EliminarEstudianteCola();
+      break;
+    case 4:
       Menu();
       break;
     }
   } while (opc != 4);
-}
-// Opcion reportes
-void Controlador::OpcionReportes() {
-  VCentroVotacion vc = this->vctrV;
-  string cedula = vc.LeerString(" Ingrese la cedula del estudiante: ");
-  if (this->centroV.InsertarEstudianteCola(cedula))
-    vc.ImprimirMensaje(
-        "\n El estudiante fue agregado correctamente a la cola.\n");
-  else
-    vc.ImprimirMensaje("\n El estudiante no esta registro a ninguna mesa o ya "
-                       "fue agregado anteriormente a la cola.\n");
 }
 void Controlador::OpcionSalir() {
   VGeneral vg;
@@ -354,4 +379,54 @@ void Controlador::EliminarEstudianteCola() {
     vc.ImprimirMensaje("\n El estudiante no se encuentra en la cola \n");
 }
 
+// procesar estudiante cola
 
+void Controlador::ProcesarEstudianteCola(){
+  VCentroVotacion vc = this->vctrV;
+  Estudiante est = this->centroV.ProcesarCola();
+  char terminalCedula = est.getCedula().back();
+  ApuntM apM = this->centroV.BuscarMesa(terminalCedula);
+  ApuntE epE = this->centroV.BuscarEstudianteMesa(est.getCedula());
+  Mesa m = this->centroV.getListaMesas().ObtInfo(apM);
+  est = m.getEstudiantes().ObtInfo(epE);
+  
+  
+  int opc;
+  int cargo;
+  
+  do {
+    vc.ImprimirEncabezado("\n      V O T A C I O N\n",
+                          "      =======  ===============");
+    vc.ImprimirMensaje("   1. Presidente.\n");
+    vc.ImprimirMensaje("   2. Secretario.\n");
+    vc.ImprimirMensaje("   3. Vice presidente.\n");
+    vc.ImprimirMensaje("   4. Vocal A.\n");
+    opc = vc.LeerValidarNro("   Seleccione su opción (1-4): ", 1, 4);
+    Voto voto;
+    bool insert;
+    switch (opc) {
+    case 1:
+       voto.setCargo("presidente");
+        insert = est.InsertarVoto(voto);
+      break;
+    case 2:
+      voto.setCargo("secretario");
+      insert = est.InsertarVoto(voto);
+      break;
+    case 3:
+      voto.setCargo("vice presidente");
+      insert = est.InsertarVoto(voto);
+      break;
+    case 4:
+      voto.setCargo("vocal A");
+      insert = est.InsertarVoto(voto);
+      break;
+    }
+    if(!insert){
+      vc.ImprimirMensaje("Anteriormente se realizo el voto por ese cargo\n");
+      vc.Pausa();
+    }
+    opc = vc.LeerChar("Desea agregar otro voto: ");
+  } while (opc == 's');
+
+}
