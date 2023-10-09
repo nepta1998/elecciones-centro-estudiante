@@ -20,8 +20,8 @@ public:
   // metodos mesa
   bool InsertarMesa(Mesa mesa);
   bool RemoverMesa(char terminalCedula);
-  nodo<Mesa> *BuscarMesa(char terminalCedula);
-  Lista<Mesa> getListaMesas();
+  nodo<Mesa> *BuscarMesa(char terminalCedula, Lista<Mesa> *lm);
+  Lista<Mesa> *getListaMesas();
   // metodos estudiante mesa
   nodo<Estudiante> *BuscarEstudianteMesa(string cedula);
   bool EliminarEstudianteMesa(string cedula);

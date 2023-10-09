@@ -19,7 +19,7 @@ bool CentroVotacion::RemoverMesa(char terminalCedula) {
   ApuntM recorrer = primero;
   while (this->listaMesas.ObtProx(recorrer) != NULL) {
     ApuntM prox = this->listaMesas.ObtProx(recorrer);
-    Mesa mesa = this->listaMesas.ObtInfo(recorrer);
+    Mesa mesa = this->listaMesas.ObtInfo(prox);
     if (mesa.getTerminalCedula() == terminalCedula) {
       ApuntM apunt = prox;
       prox = this->listaMesas.ObtProx(prox);
@@ -31,24 +31,22 @@ bool CentroVotacion::RemoverMesa(char terminalCedula) {
   }
   return false;
 };
-Lista<Mesa> CentroVotacion::getListaMesas() { return this->listaMesas; }
-
-nodo<Mesa> *CentroVotacion::BuscarMesa(char terminalCedula) {
-  Lista<Mesa> ls = this->listaMesas;
-  ApuntM ap = this->listaMesas.ObtPrimero();
+Lista<Mesa> *CentroVotacion::getListaMesas() { return &this->listaMesas; }
+nodo<Mesa> *CentroVotacion::BuscarMesa(char terminalCedula, Lista<Mesa> *lm) {
+  ApuntM ap = lm->ObtPrimero();
   while (ap != NULL) {
-    Mesa me = this->listaMesas.ObtInfo(ap);
+    Mesa me = lm->ObtInfo(ap);
     if (me.getTerminalCedula() == terminalCedula) {
       return ap;
     }
-    ap = this->listaMesas.ObtProx(ap);
+    ap = lm->ObtProx(ap);
   }
   return ap;
 };
 
 nodo<Estudiante> *CentroVotacion::BuscarEstudianteMesa(string cedula) {
   char terminalCedula = cedula.back();
-  ApuntM apMesa = this->BuscarMesa(terminalCedula);
+  ApuntM apMesa = this->BuscarMesa(terminalCedula, &this->listaMesas);
   ApuntE apEst = NULL;
   if (apMesa != NULL) {
     Mesa mesa = this->listaMesas.ObtInfo(apMesa);
@@ -62,7 +60,7 @@ nodo<Estudiante> *CentroVotacion::BuscarEstudianteMesa(string cedula) {
 
 bool CentroVotacion::EliminarEstudianteMesa(string cedula) {
   char terminalCedula = cedula.back();
-  ApuntM apMesa = this->BuscarMesa(terminalCedula);
+  ApuntM apMesa = this->BuscarMesa(terminalCedula, &this->listaMesas);
   ApuntE apEst = NULL;
   if (apMesa != NULL) {
     Mesa mesa = this->listaMesas.ObtInfo(apMesa);
@@ -77,7 +75,7 @@ bool CentroVotacion::EliminarEstudianteMesa(string cedula) {
 
 bool CentroVotacion::InsertarEstudianteMesa(Estudiante estudiante) {
   char terminalCedula = estudiante.getCedula().back();
-  ApuntM apMesa = this->BuscarMesa(terminalCedula);
+  ApuntM apMesa = this->BuscarMesa(terminalCedula, &this->listaMesas);
   ApuntE apEst = NULL;
   if (apMesa != NULL) {
     Mesa mesa = this->listaMesas.ObtInfo(apMesa);
@@ -91,7 +89,7 @@ bool CentroVotacion::InsertarEstudianteMesa(Estudiante estudiante) {
 
 bool CentroVotacion::InsertarEstudianteCola(string cedula) {
   char terminalCedula = cedula.back();
-  ApuntM apMesa = this->BuscarMesa(terminalCedula);
+  ApuntM apMesa = this->BuscarMesa(terminalCedula, &this->listaMesas);
   ApuntE apEst = NULL;
   if (apMesa != NULL) {
     Mesa mesa = this->listaMesas.ObtInfo(apMesa);

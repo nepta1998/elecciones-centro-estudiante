@@ -54,7 +54,7 @@ void Controlador::OpcionMesa() {
     vg.ImprimirMensaje("   2. Agregar Mesa.\n");
     vg.ImprimirMensaje("   3. Eliminar  Mesa.\n");
     vg.ImprimirMensaje("   4. Volver al menú anterior.\n");
-    opc = vg.LeerValidarNro("   Seleccione su opción (1-5): ", 1, 4);
+    opc = vg.LeerValidarNro("   Seleccione su opción (1-4): ", 1, 4);
     switch (opc) {
     case 1:
       this->ConsultarMesa();
@@ -186,11 +186,13 @@ void Controlador::ConsultarMesa() {
   int terminalCedula = vc.LeerValidarNro(
       " Ingrese el terminal de cedula de la mesa (0-9): ", 0, 9);
 
-  ApuntM apM = this->centroV.BuscarMesa(to_string(terminalCedula).back());
+  ApuntM apM = this->centroV.BuscarMesa(to_string(terminalCedula).back(),
+                                        this->centroV.getListaMesas());
   if (apM != NULL) {
-    Mesa m = this->centroV.getListaMesas().ObtInfo(apM);
-    vc.ImprimirMensaje("\n MESA");
-    vc.ImprimirChar("Terminal de cedula de la mesa es: ", m.getTerminalCedula());
+    Mesa m = this->centroV.getListaMesas()->ObtInfo(apM);
+    vc.ImprimirMensaje("\n MESA \n");
+    vc.ImprimirChar("Terminal de cedula de la mesa es: ",
+                    m.getTerminalCedula());
     vc.ImprimirMensaje(". \n");
     vc.Pausa();
     return;
@@ -203,7 +205,8 @@ void Controlador::ConsultarMesa() {
 void Controlador::ConsultarEstudianteMesa() {
   VCentroVotacion vc = this->vctrV;
   string cedula = vc.LeerString(" Ingrese la cedula del estudiante: ");
-  ApuntM apM = this->centroV.BuscarMesa(cedula.back());
+  ApuntM apM =
+      this->centroV.BuscarMesa(cedula.back(), this->centroV.getListaMesas());
   if (apM == NULL) {
     vc.ImprimirMensaje("\n No hay Mesa con ese terminal cedula.\n");
     vc.Pausa();
@@ -211,7 +214,7 @@ void Controlador::ConsultarEstudianteMesa() {
   }
   ApuntE apE = this->centroV.BuscarEstudianteMesa(cedula);
   if (apE != NULL) {
-    mesa = this->centroV.getListaMesas().ObtInfo(apM);
+    mesa = this->centroV.getListaMesas()->ObtInfo(apM);
     estudiante = mesa.getEstudiantes().ObtInfo(apE);
     Pila<Voto> pilaVotos = estudiante.getPilaVotos();
     vc.ImprimirMensaje("\n Estudiante");
@@ -262,7 +265,8 @@ void Controlador::InsertarMesa() {
       " Ingrese el terminal de cedula de la mesa (0-9): ", 0, 9);
 
   char terminalCedulaS = to_string(terminalCedula).back();
-  ApuntM apM = this->centroV.BuscarMesa(terminalCedulaS);
+  ApuntM apM =
+      this->centroV.BuscarMesa(terminalCedulaS, this->centroV.getListaMesas());
   if (apM == NULL) {
     mesa.setTerminalCedula(terminalCedulaS);
     if (this->centroV.InsertarMesa(mesa)) {
@@ -272,7 +276,8 @@ void Controlador::InsertarMesa() {
     vc.Pausa();
     return;
   }
-  vc.ImprimirMensaje("\n La mesa el terminal de cedula " + to_string(terminalCedulaS) + " ya esta creada.\n");
+  vc.ImprimirMensaje("\n La mesa el terminal de cedula " +
+                     to_string(terminalCedulaS) + " ya esta creada.\n");
   vc.Pausa();
 }
 
@@ -281,7 +286,8 @@ void Controlador::InsertarEstudianteMesa() {
   VCentroVotacion vc = this->vctrV;
   string cedula = vc.LeerString(" Ingrese la cedula del estudiante: ");
   char terminalCedula = cedula.back();
-  ApuntM apM = this->centroV.BuscarMesa(terminalCedula);
+  ApuntM apM =
+      this->centroV.BuscarMesa(terminalCedula, this->centroV.getListaMesas());
   if (apM == NULL) {
     vc.ImprimirMensaje("\n No hay Mesa con ese terminal cedula no es posible "
                        "agregar al estudiante.\n");
@@ -328,14 +334,15 @@ void Controlador::EliminarMesa() {
   int terminalCedula = vc.LeerValidarNro(
       " Ingrese el terminal de cedula de la mesa (0-9): ", 0, 9);
   char terminalCedulaS = to_string(terminalCedula).back();
-  ApuntM apM = this->centroV.BuscarMesa(to_string(terminalCedula).back());
+  ApuntM apM = this->centroV.BuscarMesa(to_string(terminalCedula).back(),
+                                        this->centroV.getListaMesas());
   if (apM != NULL) {
-    if(this->centroV.RemoverMesa(terminalCedulaS)){
+    if (this->centroV.RemoverMesa(terminalCedulaS)) {
       vc.ImprimirMensaje("La mesa se elimino correctamente ");
-    }else
+    } else
       vc.ImprimirMensaje("La mesa no se pudo eliminar");
     vc.Pausa();
-
+    return;
   }
   vc.ImprimirMensaje("\n No hay Mesa con ese terminal cedula.\n");
   vc.Pausa();
@@ -347,7 +354,8 @@ void Controlador::EliminarEstudianteMesa() {
   VCentroVotacion vc = this->vctrV;
   string cedula = vc.LeerString(" Ingrese la cedula del estudiante: ");
   char terminalCedula = cedula.back();
-  ApuntM apM = this->centroV.BuscarMesa(terminalCedula);
+  ApuntM apM =
+      this->centroV.BuscarMesa(terminalCedula, this->centroV.getListaMesas());
   if (apM == NULL) {
     vc.ImprimirMensaje("\n No hay Mesa con ese terminal cedula no es posible "
                        "eliminar al estudiante.\n");
@@ -381,19 +389,19 @@ void Controlador::EliminarEstudianteCola() {
 
 // procesar estudiante cola
 
-void Controlador::ProcesarEstudianteCola(){
+void Controlador::ProcesarEstudianteCola() {
   VCentroVotacion vc = this->vctrV;
   Estudiante est = this->centroV.ProcesarCola();
   char terminalCedula = est.getCedula().back();
-  ApuntM apM = this->centroV.BuscarMesa(terminalCedula);
+  ApuntM apM =
+      this->centroV.BuscarMesa(terminalCedula, this->centroV.getListaMesas());
   ApuntE epE = this->centroV.BuscarEstudianteMesa(est.getCedula());
-  Mesa m = this->centroV.getListaMesas().ObtInfo(apM);
+  Mesa m = this->centroV.getListaMesas()->ObtInfo(apM);
   est = m.getEstudiantes().ObtInfo(epE);
-  
-  
+
   int opc;
   int cargo;
-  
+
   do {
     vc.ImprimirEncabezado("\n      V O T A C I O N\n",
                           "      =======  ===============");
@@ -406,8 +414,8 @@ void Controlador::ProcesarEstudianteCola(){
     bool insert;
     switch (cargo) {
     case 1:
-       voto.setCargo("presidente");
-        insert = est.InsertarVoto(voto);
+      voto.setCargo("presidente");
+      insert = est.InsertarVoto(voto);
       break;
     case 2:
       voto.setCargo("secretario");
@@ -422,57 +430,54 @@ void Controlador::ProcesarEstudianteCola(){
       insert = est.InsertarVoto(voto);
       break;
     }
-    if(!insert){
+    if (!insert) {
       vc.ImprimirMensaje("Anteriormente se realizo el voto por ese cargo\n");
       vc.Pausa();
     }
     opc = vc.LeerChar("Desea agregar otro voto: ");
   } while (opc == 's');
-
 }
-
 
 // reportes
 
-void Controlador::EstudiantesMesa(){
+void Controlador::EstudiantesMesa() {
   VCentroVotacion vc = this->vctrV;
   vc.Limpiar();
   int terminalCedula = vc.LeerValidarNro(
       " Ingrese el terminal de cedula de la mesa (0-9): ", 0, 9);
   char terminalCedulaS = to_string(terminalCedula).back();
-  ApuntM apM = this->centroV.BuscarMesa(to_string(terminalCedula).back());
+  ApuntM apM = this->centroV.BuscarMesa(to_string(terminalCedula).back(),
+                                        this->centroV.getListaMesas());
   int count = 0;
   if (apM != NULL) {
-    Mesa m = this->centroV.getListaMesas().ObtInfo(apM);
+    Mesa m = this->centroV.getListaMesas()->ObtInfo(apM);
     Lista<Estudiante> le = m.getEstudiantes();
     ApuntE apE = le.ObtPrimero();
-    while(apE != NULL){
-        Estudiante est = le.ObtInfo(apE);
-        if(!est.getPilaVotos().Vacia()){
-          count++;
-          vc.ImprimirString("Cedula: ", est.getCedula());
-          vc.ImprimirMensaje(". \n");
-          vc.ImprimirString("Nombre: ", est.getNombre());
-          vc.ImprimirMensaje(". \n");
-          vc.ImprimirString("Carrera: ", est.getCarrera());
-          vc.ImprimirMensaje(". \n");
-          vc.ImprimirString("Semestre: ", est.getSemestre());
-          vc.ImprimirLineasBlanco(2);
-        }
-        apE = le.ObtProx(apE);
+    while (apE != NULL) {
+      Estudiante est = le.ObtInfo(apE);
+      if (!est.getPilaVotos().Vacia()) {
+        count++;
+        vc.ImprimirString("Cedula: ", est.getCedula());
+        vc.ImprimirMensaje(". \n");
+        vc.ImprimirString("Nombre: ", est.getNombre());
+        vc.ImprimirMensaje(". \n");
+        vc.ImprimirString("Carrera: ", est.getCarrera());
+        vc.ImprimirMensaje(". \n");
+        vc.ImprimirString("Semestre: ", est.getSemestre());
+        vc.ImprimirLineasBlanco(2);
+      }
+      apE = le.ObtProx(apE);
     }
-    vc.ImprimirMensaje("Cantidad de estudiantes que votaron en la mesa"+to_string(m.getTerminalCedula())+": "+ to_string(count));
+    vc.ImprimirMensaje("Cantidad de estudiantes que votaron en la mesa" +
+                       to_string(m.getTerminalCedula()) + ": " +
+                       to_string(count));
     vc.Pausa();
   }
   vc.ImprimirMensaje("\n La mesa no existe.\n");
   vc.Pausa();
-
 };
-void Controlador::VotosEstudiante(){
-  ConsultarEstudianteMesa();
-
-};
-void Controlador::CantidadVotosCargo(){
+void Controlador::VotosEstudiante() { ConsultarEstudianteMesa(); };
+void Controlador::CantidadVotosCargo() {
   VCentroVotacion vc = this->vctrV;
   Voto v;
   int cargo;
@@ -483,35 +488,34 @@ void Controlador::CantidadVotosCargo(){
   vc.ImprimirMensaje("   4. Vocal A.\n");
   cargo = vc.LeerValidarNro("   Seleccione el cargo (1-4): ", 1, 4);
   switch (cargo) {
-    case 1:
-      v.setCargo("presidente");
-      break;
-    case 2:
-      v.setCargo("secretario");
-      break;
-    case 3:
-      v.setCargo("vice presidente");
-      break;
-    case 4:
-      v.setCargo("vocal A");
-      break;
+  case 1:
+    v.setCargo("presidente");
+    break;
+  case 2:
+    v.setCargo("secretario");
+    break;
+  case 3:
+    v.setCargo("vice presidente");
+    break;
+  case 4:
+    v.setCargo("vocal A");
+    break;
   }
 
-  ApuntM apM = this->centroV.getListaMesas().ObtPrimero();
-  while(apM!=NULL){
-    Mesa m = this->centroV.getListaMesas().ObtInfo(apM);
+  ApuntM apM = this->centroV.getListaMesas()->ObtPrimero();
+  while (apM != NULL) {
+    Mesa m = this->centroV.getListaMesas()->ObtInfo(apM);
     Lista<Estudiante> le = m.getEstudiantes();
     ApuntE apE = le.ObtPrimero();
-    while (apE!=NULL)
-    {
+    while (apE != NULL) {
       Estudiante est = le.ObtInfo(apE);
-      
-      if (est.BuscarVoto(v)){
+
+      if (est.BuscarVoto(v)) {
         count++;
       }
     }
-    apM = this->centroV.getListaMesas().ObtProx(apM);
+    apM = this->centroV.getListaMesas()->ObtProx(apM);
   }
-  vc.ImprimirMensaje("Cantidad de votos para el cargo "+v.getCargo()+": "+ to_string(count));
-
+  vc.ImprimirMensaje("Cantidad de votos para el cargo " + v.getCargo() + ": " +
+                     to_string(count));
 };
