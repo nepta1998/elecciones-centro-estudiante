@@ -1,13 +1,15 @@
 #include "Mesa.h"
 
 Mesa::Mesa(){};
-Mesa::Mesa(int numeroMesa, string nombreEncargado) {
-  this->numeroMesa = numeroMesa;
+Mesa::Mesa(string terminalCedula, string nombreEncargado) {
+  this->terminalCedula = terminalCedula;
   this->nombreEncargado = nombreEncargado;
 };
 // getters and setters
-void Mesa::setNumerMesa(int numeroMesa) { this->numeroMesa = numeroMesa; };
-int Mesa::getNumeroMesa() { return this->numeroMesa; };
+void Mesa::setTerminalCedula(string terminalCedula) {
+  this->terminalCedula = terminalCedula;
+};
+string Mesa::getTerminalCedula() { return this->terminalCedula; };
 void Mesa::setNombreEncargado(string nombreEncargado) {
   this->nombreEncargado = nombreEncargado;
 };

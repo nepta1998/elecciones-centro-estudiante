@@ -6,16 +6,16 @@
 
 class Mesa {
 private:
-  int numeroMesa;
+  string terminalCedula;
   string nombreEncargado;
   Lista<Estudiante> ListaEstudiantes;
 
 public:
   Mesa();
-  Mesa(int numeroMesa, string nombreEncargado);
+  Mesa(string terminalCedula, string nombreEncargado);
   // getters and setters
-  void setNumerMesa(int numeroMesa);
-  int getNumeroMesa();
+  void setTerminalCedula(string terminalCedula);
+  string getTerminalCedula();
   void setNombreEncargado(string nombreEncargado);
   string getNombreEncargado();
   // metodos lista
