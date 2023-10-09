@@ -148,20 +148,20 @@ void Controlador::OpcionReportes() {
     vg.Limpiar();
     vg.ImprimirEncabezado("\n      M E N U  E S T U D I A N T E  C O L A\n",
                           "      =======  ===============");
-    vg.ImprimirMensaje("   1. Consultar estudiante en la cola.\n");
-    vg.ImprimirMensaje("   2. Agregar estudiante a la cola.\n");
-    vg.ImprimirMensaje("   3. Eliminar  estudiante de la cola.\n");
+    vg.ImprimirMensaje("   1. Estudiantes que votaron en una mesa.\n");
+    vg.ImprimirMensaje("   2. Votos de un Estudiante.\n");
+    vg.ImprimirMensaje("   3. Cantidad de votos por cargo.\n");
     vg.ImprimirMensaje("   4. Volver al menú anterior.\n");
     opc = vg.LeerValidarNro("   Seleccione su opción (1-4): ", 1, 4);
     switch (opc) {
     case 1:
-      this->EstudiantesVotosPorMesa();
+      this->EstudiantesMesa();
       break;
     case 2:
-      this->EstudantesQueVotaron();
+      this->VotosEstudiante();
       break;
     case 3:
-      this->EliminarEstudianteCola();
+      this->CantidadVotosCargo();
       break;
     case 4:
       Menu();
@@ -401,10 +401,10 @@ void Controlador::ProcesarEstudianteCola(){
     vc.ImprimirMensaje("   2. Secretario.\n");
     vc.ImprimirMensaje("   3. Vice presidente.\n");
     vc.ImprimirMensaje("   4. Vocal A.\n");
-    opc = vc.LeerValidarNro("   Seleccione su opción (1-4): ", 1, 4);
+    cargo = vc.LeerValidarNro("   Seleccione su opción (1-4): ", 1, 4);
     Voto voto;
     bool insert;
-    switch (opc) {
+    switch (cargo) {
     case 1:
        voto.setCargo("presidente");
         insert = est.InsertarVoto(voto);
@@ -430,3 +430,88 @@ void Controlador::ProcesarEstudianteCola(){
   } while (opc == 's');
 
 }
+
+
+// reportes
+
+void Controlador::EstudiantesMesa(){
+  VCentroVotacion vc = this->vctrV;
+  vc.Limpiar();
+  int terminalCedula = vc.LeerValidarNro(
+      " Ingrese el terminal de cedula de la mesa (0-9): ", 0, 9);
+  char terminalCedulaS = to_string(terminalCedula).back();
+  ApuntM apM = this->centroV.BuscarMesa(to_string(terminalCedula).back());
+  int count = 0;
+  if (apM != NULL) {
+    Mesa m = this->centroV.getListaMesas().ObtInfo(apM);
+    Lista<Estudiante> le = m.getEstudiantes();
+    ApuntE apE = le.ObtPrimero();
+    while(apE != NULL){
+        Estudiante est = le.ObtInfo(apE);
+        if(!est.getPilaVotos().Vacia()){
+          count++;
+          vc.ImprimirString("Cedula: ", est.getCedula());
+          vc.ImprimirMensaje(". \n");
+          vc.ImprimirString("Nombre: ", est.getNombre());
+          vc.ImprimirMensaje(". \n");
+          vc.ImprimirString("Carrera: ", est.getCarrera());
+          vc.ImprimirMensaje(". \n");
+          vc.ImprimirString("Semestre: ", est.getSemestre());
+          vc.ImprimirLineasBlanco(2);
+        }
+        apE = le.ObtProx(apE);
+    }
+    vc.ImprimirMensaje("Cantidad de estudiantes que votaron en la mesa"+to_string(m.getTerminalCedula())+": "+ to_string(count));
+    vc.Pausa();
+  }
+  vc.ImprimirMensaje("\n La mesa no existe.\n");
+  vc.Pausa();
+
+};
+void Controlador::VotosEstudiante(){
+  ConsultarEstudianteMesa();
+
+};
+void Controlador::CantidadVotosCargo(){
+  VCentroVotacion vc = this->vctrV;
+  Voto v;
+  int cargo;
+  int count = 0;
+  vc.ImprimirMensaje("   1. Presidente.\n");
+  vc.ImprimirMensaje("   2. Secretario.\n");
+  vc.ImprimirMensaje("   3. Vice presidente.\n");
+  vc.ImprimirMensaje("   4. Vocal A.\n");
+  cargo = vc.LeerValidarNro("   Seleccione el cargo (1-4): ", 1, 4);
+  switch (cargo) {
+    case 1:
+      v.setCargo("presidente");
+      break;
+    case 2:
+      v.setCargo("secretario");
+      break;
+    case 3:
+      v.setCargo("vice presidente");
+      break;
+    case 4:
+      v.setCargo("vocal A");
+      break;
+  }
+
+  ApuntM apM = this->centroV.getListaMesas().ObtPrimero();
+  while(apM!=NULL){
+    Mesa m = this->centroV.getListaMesas().ObtInfo(apM);
+    Lista<Estudiante> le = m.getEstudiantes();
+    ApuntE apE = le.ObtPrimero();
+    while (apE!=NULL)
+    {
+      Estudiante est = le.ObtInfo(apE);
+      
+      if (est.BuscarVoto(v)){
+        count++;
+      }
+    }
+    apM = this->centroV.getListaMesas().ObtProx(apM);
+  }
+  vc.ImprimirMensaje("Cantidad de votos para el cargo "+v.getCargo()+": "+ to_string(count));
+
+};

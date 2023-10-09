@@ -46,8 +46,9 @@ public:
 
   // reportes
   void OpcionReportes();
-  void CantidadVotosMesa();
-  void CantidaVotosEstudiante();
+  void EstudiantesMesa();
+  void VotosEstudiante();
+  void CantidadVotosCargo();
 
 };
 
