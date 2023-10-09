@@ -15,10 +15,9 @@ void Mesa::setNombreEncargado(string nombreEncargado) {
 };
 string Mesa::getNombreEncargado() { return this->nombreEncargado; };
 // metodos lista
-void Mesa::InsertarEstudiante(Estudiante estudiante) {
-  this->ListaEstudiantes.InsComienzo(estudiante);
+bool Mesa::InsertarEstudiante(Estudiante estudiante) {
+  return this->ListaEstudiantes.InsComienzo(estudiante);
 };
-typedef nodo<Estudiante> *Apunt;
 bool Mesa::RemoverEstudianteByCedula(string cedula) {
   Apunt primero = this->ListaEstudiantes.ObtPrimero();
   Estudiante primerEstudiante = this->ListaEstudiantes.ObtInfo(primero);
@@ -43,6 +42,18 @@ bool Mesa::RemoverEstudianteByCedula(string cedula) {
     recorrer = prox;
   }
   return false;
+};
+
+nodo<Estudiante> *Mesa::BuscarEstudianteByCedula(string cedula) {
+  Apunt ap = this->ListaEstudiantes.ObtPrimero();
+  while (ap != NULL) {
+    Estudiante estudiante = this->ListaEstudiantes.ObtInfo(ap);
+    if (estudiante.getCedula() == cedula) {
+      return ap;
+    }
+    ap = this->ListaEstudiantes.ObtProx(ap);
+  }
+  return ap;
 };
 
 Lista<Estudiante> Mesa::getEstudiantes() const {

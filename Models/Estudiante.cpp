@@ -17,5 +17,26 @@ string Estudiante::getCarrera() { return this->carrera; };
 void Estudiante::setSemestre(string semestre) { this->semestre = semestre; };
 string Estudiante::getSemestre() { return this->semestre; };
 // metodos de pila
-void Estudiante::InsertarVoto(Voto voto) { this->pilaVotos.Insertar(voto); };
-void Estudiante::RemoverVoto(Voto &voto) { this->pilaVotos.Remover(voto); };
+bool Estudiante::BuscarVoto(Voto voto) {
+  Pila<Voto> pilaAux;
+  Voto va;
+  while (!this->pilaVotos.Vacia()) {
+    this->pilaVotos.Remover(va);
+    pilaAux.Insertar(va);
+    if (va.getCargo() == voto.getCargo()) {
+      while (!pilaAux.Vacia()) {
+        pilaAux.Remover(va);
+        this->pilaVotos.Insertar(va);
+      }
+      return true;
+    }
+  }
+  return false;
+};
+bool Estudiante::InsertarVoto(Voto voto) {
+  if (!this->BuscarVoto(voto)) {
+    this->pilaVotos.Insertar(voto);
+    return true;
+  }
+  return false;
+};

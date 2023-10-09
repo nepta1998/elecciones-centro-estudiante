@@ -1,8 +1,8 @@
 #ifndef CONTROLADOR_H
 #define CONTROLADOR_H
 
-#include "../Models/CentroVotacion.h"
-#include "../Views/VCentroVotacion.h"
+#include "../Models/CentroVotacion.cpp"
+#include "../Views/VCentroVotacion.cpp"
 
 class Controlador {
 private:
@@ -15,12 +15,13 @@ public:
 
   // Menu Methods
   void Menu();
-  void OpcionBahia();
-  void OpcionVehiculo();
+  void OpcionMesa();
+  void OpcionEstudiante();
   void OpcionAyuda();
   void OpcionSalir();
 
-  // Bahia Methods
+  // Mesa
+  // Mesa Methods
   void CargarDosBahias();
   void CargarBahias();
   void IncluirBahia();

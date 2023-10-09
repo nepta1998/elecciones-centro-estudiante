@@ -2,7 +2,7 @@
 #define ESTUDIANTE_H
 
 #include "../Libs/Pila/Pila.cpp"
-#include "Voto.h"
+#include "Voto.cpp"
 #include <string>
 using namespace std;
 
@@ -27,8 +27,8 @@ public:
   string getSemestre();
   void setSemestre(string semestre);
   // pila methods
-  void InsertarVoto(Voto voto);
-  void RemoverVoto(Voto &voto);
+  bool BuscarVoto(Voto voto);
+  bool InsertarVoto(Voto voto);
 
   Pila<Voto> getPilaVotos() const;
 };

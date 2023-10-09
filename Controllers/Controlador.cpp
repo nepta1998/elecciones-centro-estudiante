@@ -1,4 +1,5 @@
 #include "Controlador.h"
+Controlador::Controlador() {}
 void Controlador::Menu() {
   int opc;
   VGeneral vg;
