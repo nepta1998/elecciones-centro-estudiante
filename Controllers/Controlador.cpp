@@ -212,7 +212,7 @@ void Controlador::ConsultarEstudianteMesa() {
     vc.Pausa();
     return;
   }
-  ApuntE apE = this->centroV.BuscarEstudianteMesa(cedula);
+  ApuntE apE = this->centroV.BuscarEstudianteMesa(cedula, apM);
   if (apE != NULL) {
     mesa = this->centroV.getListaMesas()->ObtInfo(apM);
     estudiante = mesa.getEstudiantes().ObtInfo(apE);
@@ -284,6 +284,7 @@ void Controlador::InsertarMesa() {
 // Insertar estudiante a la mesa
 void Controlador::InsertarEstudianteMesa() {
   VCentroVotacion vc = this->vctrV;
+  Estudiante est;
   string cedula = vc.LeerString(" Ingrese la cedula del estudiante: ");
   char terminalCedula = cedula.back();
   ApuntM apM =
@@ -294,24 +295,25 @@ void Controlador::InsertarEstudianteMesa() {
     vc.Pausa();
     return;
   }
-  ApuntE apE = this->centroV.BuscarEstudianteMesa(cedula);
-  if (apE == NULL) {
+  if (this->centroV.BuscarEstudianteMesa(cedula, apM) == NULL) {
 
     string nombre = vc.LeerString(" Ingrese el nombre del estudiante: ");
     string carrera = vc.LeerString(" Ingrese la carrera del estudiante: ");
     string semestre = vc.LeerString(" Ingrese el semestre del estudiante: ");
-    estudiante.setCedula(cedula);
-    estudiante.setNombre(nombre);
-    estudiante.setCarrera(carrera);
-    estudiante.setSemestre(semestre);
-    if (this->centroV.InsertarEstudianteMesa(estudiante)) {
-      vc.ImprimirMensaje("\n El estudiante fue agregada correctamente ");
+    est.setCedula(cedula);
+    est.setNombre(nombre);
+    est.setCarrera(carrera);
+    est.setSemestre(semestre);
+    if (this->centroV.InsertarEstudianteMesa(est, apM)) {
+      vc.ImprimirMensaje("\n El estudiante fue agregado correctamente ");
     } else
       vc.ImprimirMensaje(
           "\n Ocurrio un error al momento de agregar el estudiante ");
+    vc.Pausa();
     return;
   }
   vc.ImprimirMensaje("\n El estudiante ya fue agregado anteriormente.\n");
+  vc.Pausa();
 }
 
 // Insertar estudiante a la cola
@@ -362,7 +364,7 @@ void Controlador::EliminarEstudianteMesa() {
     vc.Pausa();
     return;
   }
-  ApuntE apE = this->centroV.BuscarEstudianteMesa(cedula);
+  ApuntE apE = this->centroV.BuscarEstudianteMesa(cedula, apM);
   if (apE != NULL) {
     if (this->centroV.EliminarEstudianteMesa(cedula)) {
       vc.ImprimirMensaje("\n El estudiante fue eliminado correctamente ");
@@ -395,7 +397,7 @@ void Controlador::ProcesarEstudianteCola() {
   char terminalCedula = est.getCedula().back();
   ApuntM apM =
       this->centroV.BuscarMesa(terminalCedula, this->centroV.getListaMesas());
-  ApuntE epE = this->centroV.BuscarEstudianteMesa(est.getCedula());
+  ApuntE epE = this->centroV.BuscarEstudianteMesa(est.getCedula(), apM);
   Mesa m = this->centroV.getListaMesas()->ObtInfo(apM);
   est = m.getEstudiantes().ObtInfo(epE);
 

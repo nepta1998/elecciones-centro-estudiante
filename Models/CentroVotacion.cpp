@@ -44,16 +44,13 @@ nodo<Mesa> *CentroVotacion::BuscarMesa(char terminalCedula, Lista<Mesa> *lm) {
   return ap;
 };
 
-nodo<Estudiante> *CentroVotacion::BuscarEstudianteMesa(string cedula) {
+nodo<Estudiante> *CentroVotacion::BuscarEstudianteMesa(string cedula,
+                                                       nodo<Mesa> *apMesa) {
   char terminalCedula = cedula.back();
-  ApuntM apMesa = this->BuscarMesa(terminalCedula, &this->listaMesas);
-  ApuntE apEst = NULL;
-  if (apMesa != NULL) {
-    Mesa mesa = this->listaMesas.ObtInfo(apMesa);
-    ApuntE apEst = mesa.BuscarEstudianteByCedula(cedula);
-    if (apEst != NULL) {
-      return apEst;
-    }
+  Mesa mesa = this->listaMesas.ObtInfo(apMesa);
+  ApuntE apEst = mesa.BuscarEstudianteByCedula(cedula);
+  if (apEst != NULL) {
+    return apEst;
   }
   return apEst;
 };
@@ -73,16 +70,14 @@ bool CentroVotacion::EliminarEstudianteMesa(string cedula) {
   return false;
 };
 
-bool CentroVotacion::InsertarEstudianteMesa(Estudiante estudiante) {
+bool CentroVotacion::InsertarEstudianteMesa(Estudiante estudiante,
+                                            nodo<Mesa> *apMesa) {
   char terminalCedula = estudiante.getCedula().back();
-  ApuntM apMesa = this->BuscarMesa(terminalCedula, &this->listaMesas);
-  ApuntE apEst = NULL;
-  if (apMesa != NULL) {
-    Mesa mesa = this->listaMesas.ObtInfo(apMesa);
-    ApuntE apEst = mesa.BuscarEstudianteByCedula(estudiante.getCedula());
-    if (apEst == NULL) {
-      return mesa.InsertarEstudiante(estudiante);
-    }
+  ApuntE apEst = this->listaMesas.ObtInfo(apMesa).BuscarEstudianteByCedula(
+      estudiante.getCedula());
+  cout << estudiante.getCedula() << endl;
+  if (apEst == NULL) {
+    return this->listaMesas.ObtInfo(apMesa).InsertarEstudiante(estudiante);
   }
   return false;
 };

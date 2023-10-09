@@ -23,9 +23,9 @@ public:
   nodo<Mesa> *BuscarMesa(char terminalCedula, Lista<Mesa> *lm);
   Lista<Mesa> *getListaMesas();
   // metodos estudiante mesa
-  nodo<Estudiante> *BuscarEstudianteMesa(string cedula);
+  nodo<Estudiante> *BuscarEstudianteMesa(string cedula, ApuntM apMesa);
   bool EliminarEstudianteMesa(string cedula);
-  bool InsertarEstudianteMesa(Estudiante estudiante);
+  bool InsertarEstudianteMesa(Estudiante estudiante, nodo<Mesa> *apMesa);
   // metodos estudiante cola
   bool InsertarEstudianteCola(string cedula);
   bool EstaEstudianteEnCola(string cedula);
