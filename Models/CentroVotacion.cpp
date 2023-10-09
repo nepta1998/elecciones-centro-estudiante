@@ -6,7 +6,7 @@ CentroVotacion::CentroVotacion(){};
 bool CentroVotacion::InsertarMesa(Mesa mesa) {
   return this->listaMesas.InsComienzo(mesa);
 };
-bool CentroVotacion::RemoverMesa(string terminalCedula) {
+bool CentroVotacion::RemoverMesa(char terminalCedula) {
   ApuntM primero = this->listaMesas.ObtPrimero();
   Mesa PrimeraMesa = this->listaMesas.ObtInfo(primero);
   if (PrimeraMesa.getTerminalCedula() == terminalCedula) {
@@ -33,7 +33,7 @@ bool CentroVotacion::RemoverMesa(string terminalCedula) {
 };
 Lista<Mesa> CentroVotacion::getListaMesas() { return this->listaMesas; }
 
-nodo<Mesa> *CentroVotacion::BuscarMesa(string terminalCedula) {
+nodo<Mesa> *CentroVotacion::BuscarMesa(char terminalCedula) {
   Lista<Mesa> ls = this->listaMesas;
   ApuntM ap = this->listaMesas.ObtPrimero();
   while (ap != NULL) {
@@ -47,7 +47,7 @@ nodo<Mesa> *CentroVotacion::BuscarMesa(string terminalCedula) {
 };
 
 nodo<Estudiante> *CentroVotacion::BuscarEstudianteMesa(string cedula) {
-  string terminalCedula = string(cedula.back(), 1);
+  char terminalCedula = cedula.back();
   ApuntM apMesa = this->BuscarMesa(terminalCedula);
   ApuntE apEst = NULL;
   if (apMesa != NULL) {
@@ -61,7 +61,7 @@ nodo<Estudiante> *CentroVotacion::BuscarEstudianteMesa(string cedula) {
 };
 
 bool CentroVotacion::EliminarEstudianteMesa(string cedula) {
-  string terminalCedula = string(cedula.back(), 1);
+  char terminalCedula = cedula.back();
   ApuntM apMesa = this->BuscarMesa(terminalCedula);
   ApuntE apEst = NULL;
   if (apMesa != NULL) {
@@ -76,7 +76,7 @@ bool CentroVotacion::EliminarEstudianteMesa(string cedula) {
 };
 
 bool CentroVotacion::InsertarEstudianteMesa(Estudiante estudiante) {
-  string terminalCedula = string(estudiante.getCedula(), 1);
+  char terminalCedula = estudiante.getCedula().back();
   ApuntM apMesa = this->BuscarMesa(terminalCedula);
   ApuntE apEst = NULL;
   if (apMesa != NULL) {
@@ -90,7 +90,7 @@ bool CentroVotacion::InsertarEstudianteMesa(Estudiante estudiante) {
 };
 
 bool CentroVotacion::InsertarEstudianteCola(string cedula) {
-  string terminalCedula = string(cedula.back(), 1);
+  char terminalCedula = cedula.back();
   ApuntM apMesa = this->BuscarMesa(terminalCedula);
   ApuntE apEst = NULL;
   if (apMesa != NULL) {
@@ -119,9 +119,10 @@ bool CentroVotacion::EstaEstudianteEnCola(string cedula) {
   this->colaEstudiantes = Cest;
   return estaEnCola;
 };
-void CentroVotacion::RemoverEstudianteCola(string cedula) {
+bool CentroVotacion::RemoverEstudianteCola(string cedula) {
   Estudiante est;
   Cola<Estudiante> Cest;
+  bool eliminado = true;
   while (!this->colaEstudiantes.Vacia()) {
     this->colaEstudiantes.Remover(est);
     if (!(est.getCedula() == cedula)) {
@@ -129,6 +130,7 @@ void CentroVotacion::RemoverEstudianteCola(string cedula) {
     }
   }
   this->colaEstudiantes = Cest;
+  return eliminado;
 }
 Estudiante CentroVotacion::ProcesarCola() {
   Estudiante est;

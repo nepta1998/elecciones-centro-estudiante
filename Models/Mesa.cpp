@@ -1,19 +1,14 @@
 #include "Mesa.h"
 
 Mesa::Mesa(){};
-Mesa::Mesa(string terminalCedula, string nombreEncargado) {
+Mesa::Mesa(char terminalCedula) {
   this->terminalCedula = terminalCedula;
-  this->nombreEncargado = nombreEncargado;
 };
 // getters and setters
-void Mesa::setTerminalCedula(string terminalCedula) {
+void Mesa::setTerminalCedula(char terminalCedula) {
   this->terminalCedula = terminalCedula;
 };
-string Mesa::getTerminalCedula() { return this->terminalCedula; };
-void Mesa::setNombreEncargado(string nombreEncargado) {
-  this->nombreEncargado = nombreEncargado;
-};
-string Mesa::getNombreEncargado() { return this->nombreEncargado; };
+char Mesa::getTerminalCedula() { return this->terminalCedula; };
 // metodos lista
 bool Mesa::InsertarEstudiante(Estudiante estudiante) {
   return this->ListaEstudiantes.InsComienzo(estudiante);

@@ -8,18 +8,15 @@ class Mesa {
 
 private:
   typedef nodo<Estudiante> *Apunt;
-  string terminalCedula;
-  string nombreEncargado;
+  char terminalCedula;
   Lista<Estudiante> ListaEstudiantes;
 
 public:
   Mesa();
-  Mesa(string terminalCedula, string nombreEncargado);
+  Mesa(char terminalCedula);
   // getters and setters
-  void setTerminalCedula(string terminalCedula);
-  string getTerminalCedula();
-  void setNombreEncargado(string nombreEncargado);
-  string getNombreEncargado();
+  void setTerminalCedula(char terminalCedula);
+  char getTerminalCedula();
   // metodos lista
   bool InsertarEstudiante(Estudiante estudiante);
   bool RemoverEstudianteByCedula(string cedula);

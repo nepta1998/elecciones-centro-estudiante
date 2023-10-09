@@ -30,14 +30,12 @@ public:
   void InsertarMesa();
   // void IncluirBahia();
   void ConsultarMesa();
-  void ModificarMesa();
   void EliminarMesa();
 
   // Estudiante Mesa
   void InsertarEstudianteMesa();
   // void IncluirBahia();
   void ConsultarEstudianteMesa();
-  void ModificarEstudianteMesa();
   void EliminarEstudianteMesa();
 
   // Estudiante Cola metodos
@@ -45,6 +43,12 @@ public:
   void ConsultarEstudianteCola();
   void ProcessEstudianteCola();
   void EliminarEstudianteCola();
+
+  // reportes
+  void OpcionReportes();
+  void CantidadVotosMesa();
+  void CantidaVotosEstudiante();
+
 };
 
 #endif // DATA_STRUCTURES_PROJECT_UCLA_DCYT_CONTROLADOR_H

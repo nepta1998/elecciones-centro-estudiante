@@ -19,8 +19,8 @@ public:
 
   // metodos mesa
   bool InsertarMesa(Mesa mesa);
-  bool RemoverMesa(string terminalCedula);
-  nodo<Mesa> *BuscarMesa(string terminalCedula);
+  bool RemoverMesa(char terminalCedula);
+  nodo<Mesa> *BuscarMesa(char terminalCedula);
   Lista<Mesa> getListaMesas();
   // metodos estudiante mesa
   nodo<Estudiante> *BuscarEstudianteMesa(string cedula);
@@ -29,7 +29,7 @@ public:
   // metodos estudiante cola
   bool InsertarEstudianteCola(string cedula);
   bool EstaEstudianteEnCola(string cedula);
-  void RemoverEstudianteCola(string cedula);
+  bool RemoverEstudianteCola(string cedula);
   Estudiante ProcesarCola();
   Cola<Estudiante> getColaEstudiantes();
 };
