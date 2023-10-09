@@ -11,7 +11,7 @@ class CentroVotacion {
 
 private:
   Lista<Mesa> listaMesas;
-  Cola<Estudiante> colaEstudiante;
+  Cola<Estudiante> colaEstudiantes;
 
 public:
   CentroVotacion();
@@ -21,15 +21,17 @@ public:
   bool InsertarMesa(Mesa mesa);
   bool RemoverMesa(string terminalCedula);
   nodo<Mesa> *BuscarMesa(string terminalCedula);
+  Lista<Mesa> getListaMesas();
   // metodos estudiante mesa
   nodo<Estudiante> *BuscarEstudianteMesa(string cedula);
   bool EliminarEstudianteMesa(string cedula);
   bool InsertarEstudianteMesa(Estudiante estudiante);
   // metodos estudiante cola
   bool InsertarEstudianteCola(string cedula);
-  nodo<Estudiante> *BuscarEstudianteCola(string cedula);
+  bool EstaEstudianteEnCola(string cedula);
   void RemoverEstudianteCola(string cedula);
   Estudiante ProcesarCola();
+  Cola<Estudiante> getColaEstudiantes();
 };
 
 #endif // CENTRO_VOTACION_H

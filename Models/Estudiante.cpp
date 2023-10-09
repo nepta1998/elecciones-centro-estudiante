@@ -40,3 +40,5 @@ bool Estudiante::InsertarVoto(Voto voto) {
   }
   return false;
 };
+
+Pila<Voto> Estudiante::getPilaVotos() const { return this->pilaVotos; };

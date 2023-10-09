@@ -4,11 +4,7 @@ CentroVotacion::CentroVotacion(){};
 
 // metodos lista
 bool CentroVotacion::InsertarMesa(Mesa mesa) {
-  ApuntM apM = this->BuscarMesa(mesa.getTerminalCedula());
-  if (apM == NULL) {
-    return this->listaMesas.InsComienzo(mesa);
-  }
-  return false;
+  return this->listaMesas.InsComienzo(mesa);
 };
 bool CentroVotacion::RemoverMesa(string terminalCedula) {
   ApuntM primero = this->listaMesas.ObtPrimero();
@@ -35,12 +31,14 @@ bool CentroVotacion::RemoverMesa(string terminalCedula) {
   }
   return false;
 };
+Lista<Mesa> CentroVotacion::getListaMesas() { return this->listaMesas; }
 
 nodo<Mesa> *CentroVotacion::BuscarMesa(string terminalCedula) {
+  Lista<Mesa> ls = this->listaMesas;
   ApuntM ap = this->listaMesas.ObtPrimero();
   while (ap != NULL) {
-    Mesa mesa = this->listaMesas.ObtInfo(ap);
-    if (mesa.getTerminalCedula() == terminalCedula) {
+    Mesa me = this->listaMesas.ObtInfo(ap);
+    if (me.getTerminalCedula() == terminalCedula) {
       return ap;
     }
     ap = this->listaMesas.ObtProx(ap);
@@ -100,27 +98,47 @@ bool CentroVotacion::InsertarEstudianteCola(string cedula) {
     ApuntE apEst = mesa.BuscarEstudianteByCedula(cedula);
     if (apEst != NULL) {
       Estudiante est = mesa.getEstudiantes().ObtInfo(apEst);
-      return this->colaEstudiante.Insertar(est);
+      if (!this->EstaEstudianteEnCola(cedula)) {
+        return this->colaEstudiantes.Insertar(est);
+      }
     }
   }
   return false;
 };
+bool CentroVotacion::EstaEstudianteEnCola(string cedula) {
+  Estudiante est;
+  Cola<Estudiante> Cest;
+  bool estaEnCola = false;
+  while (!this->colaEstudiantes.Vacia()) {
+    this->colaEstudiantes.Remover(est);
+    if (!(est.getCedula() == cedula)) {
+      estaEnCola = true;
+    }
+    Cest.Insertar(est);
+  }
+  this->colaEstudiantes = Cest;
+  return estaEnCola;
+};
 void CentroVotacion::RemoverEstudianteCola(string cedula) {
   Estudiante est;
   Cola<Estudiante> Cest;
-  while (!this->colaEstudiante.Vacia()) {
-    this->colaEstudiante.Remover(est);
+  while (!this->colaEstudiantes.Vacia()) {
+    this->colaEstudiantes.Remover(est);
     if (!(est.getCedula() == cedula)) {
       Cest.Insertar(est);
     }
   }
-  this->colaEstudiante = Cest;
+  this->colaEstudiantes = Cest;
 }
 Estudiante CentroVotacion::ProcesarCola() {
   Estudiante est;
-  if (!this->colaEstudiante.Vacia()) {
-    this->colaEstudiante.Remover(est);
+  if (!this->colaEstudiantes.Vacia()) {
+    this->colaEstudiantes.Remover(est);
     return est;
   }
   return est;
+}
+
+Cola<Estudiante> CentroVotacion::getColaEstudiantes() {
+  return this->colaEstudiantes;
 }

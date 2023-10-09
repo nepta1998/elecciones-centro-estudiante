@@ -5,10 +5,15 @@
 #include "../Views/VCentroVotacion.cpp"
 
 class Controlador {
+  typedef nodo<Mesa> *ApuntM;
+  typedef nodo<Estudiante> *ApuntE;
+
 private:
-  CentroVotacion centroE;
+  CentroVotacion centroV;
+  Mesa mesa;
   Estudiante estudiante; // pila
   Voto voto;
+  VCentroVotacion vctrV;
 
 public:
   Controlador();
@@ -16,24 +21,30 @@ public:
   // Menu Methods
   void Menu();
   void OpcionMesa();
-  void OpcionEstudiante();
+  void OpcionEstudianteMesa();
+  void OpcionEstudianteCola();
   void OpcionAyuda();
   void OpcionSalir();
 
-  // Mesa
-  // Mesa Methods
-  void CargarDosBahias();
-  void CargarBahias();
-  void IncluirBahia();
-  void ConsultarBahia();
-  void ModificarBahia();
-  void EliminarBahia();
+  // Mesa metodos
+  void InsertarMesa();
+  // void IncluirBahia();
+  void ConsultarMesa();
+  void ModificarMesa();
+  void EliminarMesa();
 
-  // Vehicle Methods
-  void AddCarToQueue();
-  void ConsultarVehiculo();
-  void ProcessVehicleInQueue();
-  void EliminarVehiculo();
+  // Estudiante Mesa
+  void InsertarEstudianteMesa();
+  // void IncluirBahia();
+  void ConsultarEstudianteMesa();
+  void ModificarEstudianteMesa();
+  void EliminarEstudianteMesa();
+
+  // Estudiante Cola metodos
+  void InsertarEstudianteCola();
+  void ConsultarEstudianteCola();
+  void ProcessEstudianteCola();
+  void EliminarEstudianteCola();
 };
 
 #endif // DATA_STRUCTURES_PROJECT_UCLA_DCYT_CONTROLADOR_H
