@@ -50,14 +50,14 @@ void Controlador::OpcionMesa() {
     vg.Limpiar();
     vg.ImprimirEncabezado("\n      M E N U  M E S A\n",
                           "      =======  ===============");
-    vg.ImprimirMensaje("   1. Consultar mesa.\n");
+    vg.ImprimirMensaje("   1. Consultar Mesas.\n");
     vg.ImprimirMensaje("   2. Agregar Mesa.\n");
     vg.ImprimirMensaje("   3. Eliminar  Mesa.\n");
     vg.ImprimirMensaje("   4. Volver al menú anterior.\n");
     opc = vg.LeerValidarNro("   Seleccione su opción (1-4): ", 1, 4);
     switch (opc) {
     case 1:
-      this->ConsultarMesa();
+      this->ConsultarMesas();
       break;
     case 2:
       this->InsertarMesa();
@@ -181,24 +181,23 @@ void Controlador::OpcionSalir() {
 }
 
 // Consultar mesa por terminal de cedula
-void Controlador::ConsultarMesa() {
+void Controlador::ConsultarMesas() {
   VCentroVotacion vc = this->vctrV;
   vc.Limpiar();
-  int terminalCedula = vc.LeerValidarNro(
-      " Ingrese el terminal de cedula de la mesa (0-9): ", 0, 9);
 
-  ApuntM apM = this->centroV.BuscarMesa(to_string(terminalCedula).back(),
-                                        this->centroV.getListaMesas());
-  if (apM != NULL) {
-    Mesa* m = this->centroV.getListaMesas()->ObtInfo(apM);
-    vc.ImprimirMensaje("\n MESA \n");
-    vc.ImprimirChar("Terminal de cedula de la mesa es: ",
-                    m->getTerminalCedula());
-    vc.ImprimirMensaje(". \n");
-    vc.Pausa();
-    return;
+  Lista<Mesa>* lm = this->centroV.getListaMesas();  
+  ApuntM apM = lm->ObtPrimero();   
+  vc.ImprimirEncabezado("\n      M E S A S\n",
+                          "      =======  ==============="); 
+  if (apM == NULL)
+    vc.ImprimirMensaje("\n No Disponible.\n");                
+  while (apM != NULL) {
+    
+    Mesa* m = lm->ObtInfo(apM);
+    vc.ImprimirChar("Mesa ", m->getTerminalCedula());
+    vc.ImprimirMensaje("\n");
+    apM = lm->ObtProx(apM);
   }
-  vc.ImprimirMensaje("\n No hay Mesa con ese terminal cedula.\n");
   vc.Pausa();
 }
 
@@ -287,8 +286,7 @@ void Controlador::InsertarMesa() {
     vc.Pausa();
     return;
   }
-  vc.ImprimirMensaje("\n La mesa el terminal de cedula " +
-                     to_string(terminalCedulaS) + " ya esta creada.\n");
+  vc.ImprimirMensaje("\n La mesa con el terminal de cedula " + to_string(terminalCedula) + " ya esta creada.\n");
   vc.Pausa();
 }
 

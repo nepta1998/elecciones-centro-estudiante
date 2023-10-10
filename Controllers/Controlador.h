@@ -29,7 +29,7 @@ public:
   // Mesa metodos
   void InsertarMesa();
   // void IncluirBahia();
-  void ConsultarMesa();
+  void ConsultarMesas();
   void EliminarMesa();
 
   // Estudiante Mesa
