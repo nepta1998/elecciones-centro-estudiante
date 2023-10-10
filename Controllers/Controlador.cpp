@@ -143,7 +143,7 @@ void Controlador::OpcionEstudianteCola() {
     vg.Limpiar();
     vg.ImprimirEncabezado("\n      M E N U  E S T U D I A N T E  C O L A\n",
                           "      =======  ===============");
-    vg.ImprimirMensaje("   1. Consultar estudiante en la cola.\n");
+    vg.ImprimirMensaje("   1. Consultar cola de estudiantes.\n");
     vg.ImprimirMensaje("   2. Agregar estudiante a la cola.\n");
     vg.ImprimirMensaje("   3. Eliminar  estudiante de la cola.\n");
     vg.ImprimirMensaje("   4. Procesar  estudiante (votar).\n");
@@ -204,7 +204,7 @@ void Controlador::OpcionSalir() {
   VGeneral vg;
   vg.Limpiar();
   int opc =
-      vg.LeerValidarNro("   ¿Está seguro que desea salir? 1.Si 2.No ", 1, 2);
+      vg.LeerValidarNro("¿Está seguro que desea salir? 1.Si 2.No ", 1, 2);
   if (opc == 1)
     vg.Pausa();
   else

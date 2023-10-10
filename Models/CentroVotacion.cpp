@@ -121,12 +121,13 @@ bool CentroVotacion::EstaEstudianteEnCola(string cedula) {
 bool CentroVotacion::RemoverEstudianteCola(string cedula) {
   Estudiante est;
   Cola<Estudiante> Cest;
-  bool eliminado = true;
+  bool eliminado = false;
   while (!this->colaEstudiantes.Vacia()) {
     this->colaEstudiantes.Remover(est);
     if (!(est.getCedula() == cedula)) {
       Cest.Insertar(est);
-    }
+    }else
+     eliminado=true;
   }
   this->colaEstudiantes = Cest;
   return eliminado;
