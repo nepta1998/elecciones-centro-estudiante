@@ -227,24 +227,7 @@ void Controlador::ConsultarEstudianteMesa() {
     vc.ImprimirString("Carrera: ", est->getCarrera());
     vc.ImprimirMensaje(". \n");
     vc.ImprimirString("Semestre: ", est->getSemestre());
-    vc.ImprimirMensaje("\n Votos");
-    vc.ImprimirMensaje(". \n");
-    if(pilaVotos->Vacia()){
-      vc.ImprimirMensaje("El estudiante no tiene votos");
-    }else 
-    while (!pilaVotos->Vacia()) {
-      pilaVotos->Remover(voto);
-      aux.Insertar(voto);
-      vc.ImprimirMensaje(voto.getCargo() + '\n');
-    }
-    while (!pilaVotos->Vacia()) {
-      aux.Remover(voto);
-      pilaVotos->Insertar(voto);
-      vc.ImprimirMensaje(voto.getCargo() + '\n');
-    }
-    vc.Pausa();
-    return;
-  }
+  }else
   vc.ImprimirMensaje("\n El estudiante no esta asignado a la mesa.\n");
   vc.Pausa();
 }
@@ -358,7 +341,7 @@ void Controlador::InsertarEstudianteCola() {
     vc.ImprimirMensaje(
         "\n El estudiante fue agregado correctamente a la cola.\n");
   else
-    vc.ImprimirMensaje("\n El estudiante no esta registro a ninguna mesa o ya "
+    vc.ImprimirMensaje("\n El estudiante no esta registrado a ninguna mesa o ya "
                        "fue agregado anteriormente a la cola.\n");
   vc.Pausa();
 }
@@ -432,6 +415,13 @@ void Controlador::EliminarEstudianteCola() {
 void Controlador::ProcesarEstudianteCola() {
   VCentroVotacion vc = this->vctrV;
   Estudiante est = this->centroV.ProcesarCola();
+  if(est.getCedula().empty()){
+    vc.Limpiar();
+    vc.ImprimirMensaje("No hay estudiantes en la cola\n");
+    vc.ImprimirLineasBlanco(1);
+    vc.Pausa(); 
+    return;
+  }
   char terminalCedula = est.getCedula().back();
   ApuntM apM =
       this->centroV.BuscarMesa(terminalCedula, this->centroV.getListaMesas());
@@ -524,15 +514,49 @@ void Controlador::EstudiantesMesa() {
       }
       apE = le->ObtProx(apE);
     }
+    string str = string(m->getTerminalCedula(), 1);
     vc.ImprimirMensaje("Cantidad de estudiantes que votaron en la mesa " +
-                       to_string(m->getTerminalCedula()) + ": " +
+                        str + ": " +
                        to_string(count));
-    vc.Pausa();
-  }
-  vc.ImprimirMensaje("\n La mesa no existe.\n");
+  }else
+  vc.ImprimirMensaje("\n La mesa no existe.\n"); 
   vc.Pausa();
 };
-void Controlador::VotosEstudiante() { ConsultarEstudianteMesa(); };
+void Controlador::VotosEstudiante() { 
+  VCentroVotacion vc = this->vctrV;
+  vc.Limpiar();
+  string cedula = vc.LeerString(" Ingrese la cedula del estudiante: ");
+  ApuntM apM =
+      this->centroV.BuscarMesa(cedula.back(), this->centroV.getListaMesas());
+  if (apM == NULL) {
+    vc.ImprimirMensaje("\n No hay Mesa con ese terminal cedula.\n");
+    vc.Pausa();
+    return;
+  }
+  ApuntE apE = this->centroV.BuscarEstudianteMesa(cedula, apM);
+  if (apE != NULL) {
+    Mesa* mes = this->centroV.getListaMesas()->ObtInfo(apM);
+    Estudiante* est = mes->getEstudiantes()->ObtInfo(apE);
+    Pila<Voto>* pilaVotos = est->getPilaVotos();
+    Pila<Voto> aux;
+    vc.ImprimirEncabezado("\n      V O T O S\n",
+                          "      =======  ===============");
+    if(pilaVotos->Vacia()){
+      vc.ImprimirMensaje("El estudiante a realizado ningun voto");
+    }else 
+    while (!pilaVotos->Vacia()) {
+      pilaVotos->Remover(voto);
+      aux.Insertar(voto);
+      vc.ImprimirMensaje(' ' + voto.getCargo() + '\n');
+    }
+    while (!aux.Vacia()) {
+      aux.Remover(voto);
+      pilaVotos->Insertar(voto);
+    }
+  }else
+  vc.ImprimirMensaje("\n El estudiante no esta asignado a la mesa.\n");
+  vc.Pausa(); 
+};
 void Controlador::CantidadVotosCargo() {
   VCentroVotacion vc = this->vctrV;
   vc.Limpiar();
@@ -566,13 +590,14 @@ void Controlador::CantidadVotosCargo() {
     ApuntE apE = le->ObtPrimero();
     while (apE != NULL) {
       Estudiante* est = le->ObtInfo(apE);
-
       if (est->BuscarVoto(v)) {
         count++;
       }
+      apE = le->ObtProx(apE);
     }
     apM = this->centroV.getListaMesas()->ObtProx(apM);
   }
   vc.ImprimirMensaje("Cantidad de votos para el cargo " + v.getCargo() + ": " +
                      to_string(count));
+   vc.Pausa();
 };
