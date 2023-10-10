@@ -31,7 +31,7 @@ public:
   bool EstaEstudianteEnCola(string cedula);
   bool RemoverEstudianteCola(string cedula);
   Estudiante ProcesarCola();
-  Cola<Estudiante> getColaEstudiantes();
+  Cola<Estudiante>* getColaEstudiantes();
 };
 
 #endif // CENTRO_VOTACION_H

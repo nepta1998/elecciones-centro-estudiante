@@ -137,6 +137,6 @@ Estudiante CentroVotacion::ProcesarCola() {
   return est;
 }
 
-Cola<Estudiante> CentroVotacion::getColaEstudiantes() {
-  return this->colaEstudiantes;
+Cola<Estudiante>* CentroVotacion::getColaEstudiantes() {
+  return &this->colaEstudiantes;
 }

@@ -115,8 +115,8 @@ void Controlador::OpcionEstudianteCola() {
     vg.ImprimirMensaje("   1. Consultar estudiante en la cola.\n");
     vg.ImprimirMensaje("   2. Agregar estudiante a la cola.\n");
     vg.ImprimirMensaje("   3. Eliminar  estudiante de la cola.\n");
-    vg.ImprimirMensaje("   4. Procesar  estudiante de la cola.\n");
-    vg.ImprimirMensaje("   5. Procesar Estudiante.\n");
+    vg.ImprimirMensaje("   4. Procesar  estudiante (votar).\n");
+    vg.ImprimirMensaje("   5. Volver al menú anterior.\n");
     opc = vg.LeerValidarNro("   Seleccione su opción (1-5): ", 1, 5);
     switch (opc) {
     case 1:
@@ -247,21 +247,34 @@ void Controlador::ConsultarEstudianteCola() {
   VCentroVotacion vc = this->vctrV;
   vc.Limpiar();
   string cedula = vc.LeerString(" Ingrese la cedula del estudiante: ");
-  Cola<Estudiante> CEst = this->centroV.getColaEstudiantes();
-  while (!CEst.Vacia()) {
-    CEst.Remover(estudiante);
-    if (estudiante.getCedula() == cedula) {
+  Cola<Estudiante>* CEst = this->centroV.getColaEstudiantes();
+  Cola<Estudiante> aux;
+  bool check = false;
+  while (!CEst->Vacia()) {
+    Estudiante es;
+    CEst->Remover(es);
+    aux.Insertar(es);
+    if (es.getCedula() == cedula) {
       vc.ImprimirMensaje("\n Estudiante");
-      vc.ImprimirString("Cedula: ", estudiante.getCedula());
+      vc.ImprimirString("Cedula: ", es.getCedula());
       vc.ImprimirMensaje(". \n");
-      vc.ImprimirString("Nombre: ", estudiante.getNombre());
+      vc.ImprimirString("Nombre: ", es.getNombre());
       vc.ImprimirMensaje(". \n");
-      vc.ImprimirString("Carrera: ", estudiante.getCarrera());
+      vc.ImprimirString("Carrera: ", es.getCarrera());
       vc.ImprimirMensaje(". \n");
-      vc.ImprimirString("Semestre: ", estudiante.getSemestre());
-      return;
+      vc.ImprimirString("Semestre: ", es.getSemestre());
+      check = true;
     }
   }
+  while (!aux.Vacia()) {
+      Estudiante es;
+      aux.Remover(es);
+      CEst->Insertar(es);
+  }
+  if (!check){
+    vc.ImprimirMensaje("El estudiante no esta en la cola \n"); 
+  }
+  vc.Pausa();
 }
 
 // Insertar mesa
@@ -340,6 +353,7 @@ void Controlador::InsertarEstudianteCola() {
   else
     vc.ImprimirMensaje("\n El estudiante no esta registro a ninguna mesa o ya "
                        "fue agregado anteriormente a la cola.\n");
+  vc.Pausa();
 }
 
 // eliminar mesa
@@ -403,6 +417,7 @@ void Controlador::EliminarEstudianteCola() {
     vc.ImprimirMensaje("\n El estudiante fue eliminado correctamente.\n");
   else
     vc.ImprimirMensaje("\n El estudiante no se encuentra en la cola \n");
+  vc.Pausa();
 }
 
 // procesar estudiante cola
