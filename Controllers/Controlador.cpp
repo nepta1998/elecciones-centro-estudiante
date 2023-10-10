@@ -204,6 +204,7 @@ void Controlador::ConsultarMesa() {
 // Consultar estudiante mesa
 void Controlador::ConsultarEstudianteMesa() {
   VCentroVotacion vc = this->vctrV;
+  vc.Limpiar();
   string cedula = vc.LeerString(" Ingrese la cedula del estudiante: ");
   ApuntM apM =
       this->centroV.BuscarMesa(cedula.back(), this->centroV.getListaMesas());
@@ -244,6 +245,7 @@ void Controlador::ConsultarEstudianteMesa() {
 // Consultar estudiante cola
 void Controlador::ConsultarEstudianteCola() {
   VCentroVotacion vc = this->vctrV;
+  vc.Limpiar();
   string cedula = vc.LeerString(" Ingrese la cedula del estudiante: ");
   Cola<Estudiante> CEst = this->centroV.getColaEstudiantes();
   while (!CEst.Vacia()) {
@@ -289,6 +291,7 @@ void Controlador::InsertarMesa() {
 // Insertar estudiante a la mesa
 void Controlador::InsertarEstudianteMesa() {
   VCentroVotacion vc = this->vctrV;
+  vc.Limpiar();
   Estudiante est;
   string cedula = vc.LeerString(" Ingrese la cedula del estudiante: ");
   string ced = cedula;
@@ -329,6 +332,7 @@ void Controlador::InsertarEstudianteMesa() {
 // Insertar estudiante a la cola
 void Controlador::InsertarEstudianteCola() {
   VCentroVotacion vc = this->vctrV;
+  vc.Limpiar();
   string cedula = vc.LeerString(" Ingrese la cedula del estudiante: ");
   if (this->centroV.InsertarEstudianteCola(cedula))
     vc.ImprimirMensaje(
@@ -364,6 +368,7 @@ void Controlador::EliminarMesa() {
 
 void Controlador::EliminarEstudianteMesa() {
   VCentroVotacion vc = this->vctrV;
+  vc.Limpiar();
   string cedula = vc.LeerString(" Ingrese la cedula del estudiante: ");
   char terminalCedula = cedula.back();
   ApuntM apM =
@@ -392,6 +397,7 @@ void Controlador::EliminarEstudianteMesa() {
 void Controlador::EliminarEstudianteCola() {
 
   VCentroVotacion vc = this->vctrV;
+  vc.Limpiar();
   string cedula = vc.LeerString(" Ingrese la cedula del estudiante: ");
   if (this->centroV.RemoverEstudianteCola(cedula))
     vc.ImprimirMensaje("\n El estudiante fue eliminado correctamente.\n");
@@ -403,6 +409,7 @@ void Controlador::EliminarEstudianteCola() {
 
 void Controlador::ProcesarEstudianteCola() {
   VCentroVotacion vc = this->vctrV;
+  vc.Limpiar();
   Estudiante est = this->centroV.ProcesarCola();
   char terminalCedula = est.getCedula().back();
   ApuntM apM =
@@ -491,6 +498,7 @@ void Controlador::EstudiantesMesa() {
 void Controlador::VotosEstudiante() { ConsultarEstudianteMesa(); };
 void Controlador::CantidadVotosCargo() {
   VCentroVotacion vc = this->vctrV;
+  vc.Limpiar();
   Voto v;
   int cargo;
   int count = 0;
