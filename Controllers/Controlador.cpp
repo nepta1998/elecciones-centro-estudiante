@@ -269,34 +269,36 @@ void Controlador::ConsultarEstudianteMesa() {
 void Controlador::ConsultarEstudianteCola() {
   VCentroVotacion vc = this->vctrV;
   vc.Limpiar();
-  string cedula = vc.LeerString(" Ingrese la cedula del estudiante: ");
   Cola<Estudiante>* CEst = this->centroV.getColaEstudiantes();
   Cola<Estudiante> aux;
-  bool check = false;
+  vc.ImprimirEncabezado("\n  E S T U D I A N T E S \n",
+                          "  =======  ==============="); 
+
+  if(CEst->Vacia()){
+    vc.ImprimirLineasBlanco(2);
+    vc.ImprimirMensaje("\n No hay estudiantes en la cola ");
+    vc.ImprimirLineasBlanco(2);
+  }                 
   while (!CEst->Vacia()) {
     Estudiante es;
     CEst->Remover(es);
     aux.Insertar(es);
-    if (es.getCedula() == cedula) {
-      vc.ImprimirMensaje("\n Estudiante");
-      vc.ImprimirString("Cedula: ", es.getCedula());
-      vc.ImprimirMensaje(". \n");
-      vc.ImprimirString("Nombre: ", es.getNombre());
-      vc.ImprimirMensaje(". \n");
-      vc.ImprimirString("Carrera: ", es.getCarrera());
-      vc.ImprimirMensaje(". \n");
-      vc.ImprimirString("Semestre: ", es.getSemestre());
-      check = true;
-    }
+    vc.ImprimirLineasBlanco(2);
+    vc.ImprimirString("Cedula: ", es.getCedula());
+    vc.ImprimirMensaje("\n");
+    vc.ImprimirString("Nombre: ", es.getNombre());
+    vc.ImprimirMensaje("\n");
+    vc.ImprimirString("Carrera: ", es.getCarrera());
+    vc.ImprimirMensaje("\n");
+    vc.ImprimirString("Semestre: ", es.getSemestre());
+    vc.ImprimirMensaje("\n");
   }
   while (!aux.Vacia()) {
       Estudiante es;
       aux.Remover(es);
       CEst->Insertar(es);
   }
-  if (!check){
-    vc.ImprimirMensaje("El estudiante no esta en la cola \n"); 
-  }
+  vc.ImprimirLineasBlanco(2);
   vc.Pausa();
 }
 
