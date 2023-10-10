@@ -107,12 +107,15 @@ bool CentroVotacion::EstaEstudianteEnCola(string cedula) {
   bool estaEnCola = false;
   while (!this->colaEstudiantes.Vacia()) {
     this->colaEstudiantes.Remover(est);
-    if (!(est.getCedula() == cedula)) {
+    Cest.Insertar(est);
+    if ((est.getCedula() == cedula)) {
       estaEnCola = true;
     }
-    Cest.Insertar(est);
   }
-  this->colaEstudiantes = Cest;
+  while(!Cest.Vacia()){
+    Cest.Remover(est);
+    this->colaEstudiantes.Insertar(est);
+  }
   return estaEnCola;
 };
 bool CentroVotacion::RemoverEstudianteCola(string cedula) {
