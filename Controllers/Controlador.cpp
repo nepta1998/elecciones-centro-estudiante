@@ -57,7 +57,6 @@ void Controlador::Menu() {
       OpcionReportes();
       break;
     case 5:
-      cout << "opcion 5";
       OpcionSalir();
     }
   } while (opc != 5);
@@ -88,9 +87,6 @@ void Controlador::OpcionMesa() {
     case 3:
       this->EliminarMesa();
       break;
-    case 4:
-      Menu();
-      break;
     }
   } while (opc != 4);
 }
@@ -118,9 +114,6 @@ void Controlador::OpcionEstudianteMesa() {
       break;
     case 3:
       this->EliminarEstudianteMesa();
-      break;
-    case 4:
-      Menu();
       break;
     }
   } while (opc != 4);
@@ -154,9 +147,6 @@ void Controlador::OpcionEstudianteCola() {
     case 4:
       this->ProcesarEstudianteCola();
       break;
-    case 5:
-      Menu();
-      break;
     }
   } while (opc != 5);
 }
@@ -186,9 +176,6 @@ void Controlador::OpcionReportes() {
     case 3:
       this->CantidadVotosCargo();
       break;
-    case 4:
-      Menu();
-      break;
     }
   } while (opc != 4);
 }
@@ -196,9 +183,9 @@ void Controlador::OpcionSalir() {
   VGeneral vg;
   vg.Limpiar();
   int opc = vg.LeerValidarNro("¿Está seguro que desea salir? 1.Si 2.No ", 1, 2);
-  if (opc == 1)
+  if (opc == 1) {
     vg.Pausa();
-  else
+  } else
     Menu();
 }
 
