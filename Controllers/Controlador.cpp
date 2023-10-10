@@ -24,10 +24,10 @@ void Controlador::Inicializar(){
   m1p->InsertarEstudiante(e1);
   apM = this->centroV.BuscarMesa('2', this->centroV.getListaMesas());
   Mesa* m2p = this->centroV.getListaMesas()->ObtInfo(apM);
-  m2p->InsertarEstudiante(e1);
+  m2p->InsertarEstudiante(e2);
   apM = this->centroV.BuscarMesa('3', this->centroV.getListaMesas());
   Mesa* m3p = this->centroV.getListaMesas()->ObtInfo(apM);
-  m3p->InsertarEstudiante(e1);
+  m3p->InsertarEstudiante(e3);
 
 
 }
@@ -592,28 +592,10 @@ void Controlador::VotosEstudiante() {
 void Controlador::CantidadVotosCargo() {
   VCentroVotacion vc = this->vctrV;
   vc.Limpiar();
-  Voto v;
-  int cargo;
-  int count = 0;
-  vc.ImprimirMensaje("   1. Presidente.\n");
-  vc.ImprimirMensaje("   2. Secretario.\n");
-  vc.ImprimirMensaje("   3. Vice presidente.\n");
-  vc.ImprimirMensaje("   4. Vocal A.\n");
-  cargo = vc.LeerValidarNro("   Seleccione el cargo (1-4): ", 1, 4);
-  switch (cargo) {
-  case 1:
-    v.setCargo("presidente");
-    break;
-  case 2:
-    v.setCargo("secretario");
-    break;
-  case 3:
-    v.setCargo("vice presidente");
-    break;
-  case 4:
-    v.setCargo("vocal A");
-    break;
-  }
+  int count1 = 0;
+  int count2 = 0;
+  int count3 = 0;
+  int count4 = 0;
 
   ApuntM apM = this->centroV.getListaMesas()->ObtPrimero();
   while (apM != NULL) {
@@ -622,14 +604,46 @@ void Controlador::CantidadVotosCargo() {
     ApuntE apE = le->ObtPrimero();
     while (apE != NULL) {
       Estudiante* est = le->ObtInfo(apE);
-      if (est->BuscarVoto(v)) {
-        count++;
+      Voto vo;
+      Pila<Voto> aux;
+      Pila<Voto>* votos = est->getPilaVotos();
+      while (!votos->Vacia()) {
+        votos->Remover(vo);
+        aux.Insertar(vo);
+        if (vo.getCargo() == "presidente") {
+          count1++;
+          continue;
+        }
+        if (vo.getCargo() == "secretario") {
+          count2++;
+          continue;
+        }
+        if (vo.getCargo() == "vice presidente") {
+          count3++;
+          continue;
+        }
+        if (vo.getCargo() == "vocal A") {
+          count4++;
+          continue;
+        }
+      }
+      while (!aux.Vacia()) {
+          aux.Remover(vo);
+          votos->Insertar(vo);
       }
       apE = le->ObtProx(apE);
     }
     apM = this->centroV.getListaMesas()->ObtProx(apM);
   }
-  vc.ImprimirMensaje("Cantidad de votos para el cargo " + v.getCargo() + ": " +
-                     to_string(count));
+  vc.ImprimirEncabezado("\n    V O T O S   P O R  C A R G O\n",
+                          "    =======  ===============");
+  vc.ImprimirMensaje("Cantidad de votos para el cargo presidente: " + to_string(count1));
+  vc.ImprimirMensaje("\n");
+  vc.ImprimirMensaje("Cantidad de votos para el cargo secretario: " + to_string(count2));
+  vc.ImprimirMensaje("\n");
+  vc.ImprimirMensaje("Cantidad de votos para el cargo vice presidente: " +to_string(count3));
+  vc.ImprimirMensaje("\n");
+  vc.ImprimirMensaje("Cantidad de votos para el cargo vocal A: "  +to_string(count4));
+  vc.ImprimirMensaje("\n");
    vc.Pausa();
 };
