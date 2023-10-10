@@ -30,7 +30,7 @@ public:
   bool BuscarVoto(Voto voto);
   bool InsertarVoto(Voto voto);
 
-  Pila<Voto> getPilaVotos();
+  Pila<Voto>* getPilaVotos();
 };
 
 #endif // ESTUDIANTE_H

@@ -20,18 +20,20 @@ string Estudiante::getSemestre() { return this->semestre; };
 bool Estudiante::BuscarVoto(Voto voto) {
   Pila<Voto> pilaAux;
   Voto va;
+  bool check = false;
   while (!this->pilaVotos.Vacia()) {
     this->pilaVotos.Remover(va);
     pilaAux.Insertar(va);
     if (va.getCargo() == voto.getCargo()) {
-      while (!pilaAux.Vacia()) {
-        pilaAux.Remover(va);
-        this->pilaVotos.Insertar(va);
-      }
-      return true;
+      check = true;
+      break;
     }
   }
-  return false;
+  while (!pilaAux.Vacia()) {
+      pilaAux.Remover(va);
+      this->pilaVotos.Insertar(va);
+  }
+  return check;
 };
 bool Estudiante::InsertarVoto(Voto voto) {
   if (!this->BuscarVoto(voto)) {
@@ -41,4 +43,4 @@ bool Estudiante::InsertarVoto(Voto voto) {
   return false;
 };
 
-Pila<Voto> Estudiante::getPilaVotos() { return this->pilaVotos; };
+Pila<Voto>* Estudiante::getPilaVotos() { return &this->pilaVotos; };
