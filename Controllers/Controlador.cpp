@@ -1,5 +1,36 @@
 #include "Controlador.h"
-Controlador::Controlador() {}
+Controlador::Controlador() {
+  this->Inicializar();
+}
+void Controlador::Inicializar(){
+  Mesa m1 = Mesa('1');
+  Mesa m2 = Mesa('2');
+  Mesa m3 = Mesa('3');
+
+  Estudiante e1 = Estudiante("111", "pedro", "informatica", "semestre 1");
+  Estudiante e2 = Estudiante("222", "manuel", "sistemas", "semestre 1");
+  Estudiante e3 = Estudiante("333", "jose", "informatica", "semestre 4");
+
+  //m1.getEstudiantes()->InsComienzo(e1);
+  //m2.getEstudiantes()->InsComienzo(e2);
+  //m3.getEstudiantes()->InsComienzo(e3);
+
+  this->centroV.getListaMesas()->InsComienzo(m1);
+  this->centroV.getListaMesas()->InsComienzo(m2);
+  this->centroV.getListaMesas()->InsComienzo(m3);
+
+  ApuntM apM = this->centroV.BuscarMesa('1', this->centroV.getListaMesas());
+  Mesa* m1p = this->centroV.getListaMesas()->ObtInfo(apM);
+  m1p->InsertarEstudiante(e1);
+  apM = this->centroV.BuscarMesa('2', this->centroV.getListaMesas());
+  Mesa* m2p = this->centroV.getListaMesas()->ObtInfo(apM);
+  m2p->InsertarEstudiante(e1);
+  apM = this->centroV.BuscarMesa('3', this->centroV.getListaMesas());
+  Mesa* m3p = this->centroV.getListaMesas()->ObtInfo(apM);
+  m3p->InsertarEstudiante(e1);
+
+
+}
 void Controlador::Menu() {
   int opc;
   VGeneral vg;
@@ -187,14 +218,14 @@ void Controlador::ConsultarMesas() {
 
   Lista<Mesa>* lm = this->centroV.getListaMesas();  
   ApuntM apM = lm->ObtPrimero();   
-  vc.ImprimirEncabezado("\n      M E S A S\n",
-                          "      =======  ==============="); 
+  vc.ImprimirEncabezado("\n   M E S A S\n",
+                          "  =======  ==============="); 
   if (apM == NULL)
     vc.ImprimirMensaje("\n No Disponible.\n");                
   while (apM != NULL) {
     
     Mesa* m = lm->ObtInfo(apM);
-    vc.ImprimirChar("Mesa ", m->getTerminalCedula());
+    vc.ImprimirChar(" Mesa ", m->getTerminalCedula());
     vc.ImprimirMensaje("\n");
     apM = lm->ObtProx(apM);
   }
@@ -219,14 +250,16 @@ void Controlador::ConsultarEstudianteMesa() {
     Estudiante* est = mes->getEstudiantes()->ObtInfo(apE);
     Pila<Voto>* pilaVotos = est->getPilaVotos();
     Pila<Voto> aux;
-    vc.ImprimirMensaje("\n Estudiante \n ");
-    vc.ImprimirString("Cedula: ", est->getCedula());
-    vc.ImprimirMensaje(". \n");
-    vc.ImprimirString("Nombre: ", est->getNombre());
-    vc.ImprimirMensaje(". \n");
-    vc.ImprimirString("Carrera: ", est->getCarrera());
-    vc.ImprimirMensaje(". \n");
-    vc.ImprimirString("Semestre: ", est->getSemestre());
+    vc.ImprimirEncabezado("\n  E S T U D I A N T E \n",
+                          "  =======  ==============="); 
+    vc.ImprimirString(" Cedula: ", est->getCedula());
+    vc.ImprimirMensaje(" \n");
+    vc.ImprimirString(" Nombre: ", est->getNombre());
+    vc.ImprimirMensaje(" \n");
+    vc.ImprimirString(" Carrera: ", est->getCarrera());
+    vc.ImprimirMensaje(" \n");
+    vc.ImprimirString(" Semestre: ", est->getSemestre());
+    vc.ImprimirLineasBlanco(2);
   }else
   vc.ImprimirMensaje("\n El estudiante no esta asignado a la mesa.\n");
   vc.Pausa();

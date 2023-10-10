@@ -17,7 +17,9 @@ private:
 
 public:
   Controlador();
-
+  
+  // inicializar datos
+  void Inicializar();
   // Menu Methods
   void Menu();
   void OpcionMesa();
