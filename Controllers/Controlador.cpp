@@ -11,10 +11,6 @@ void Controlador::Inicializar(){
   Estudiante e2 = Estudiante("222", "manuel", "sistemas", "semestre 1");
   Estudiante e3 = Estudiante("333", "jose", "informatica", "semestre 4");
 
-  //m1.getEstudiantes()->InsComienzo(e1);
-  //m2.getEstudiantes()->InsComienzo(e2);
-  //m3.getEstudiantes()->InsComienzo(e3);
-
   this->centroV.getListaMesas()->InsComienzo(m1);
   this->centroV.getListaMesas()->InsComienzo(m2);
   this->centroV.getListaMesas()->InsComienzo(m3);
