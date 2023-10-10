@@ -171,6 +171,7 @@ void Controlador::OpcionReportes() {
 }
 void Controlador::OpcionSalir() {
   VGeneral vg;
+  vg.Limpiar();
   int opc =
       vg.LeerValidarNro("   ¿Está seguro que desea salir? 1.Si 2.No ", 1, 2);
   if (opc == 1)
