@@ -83,8 +83,8 @@ template <class Tipo> void Lista<Tipo>::AsigProx(Apuntador p, Apuntador q) {
   p->prox = q;
 };
 
-template <class Tipo> Tipo Lista<Tipo>::ObtInfo(Apuntador p) {
-  return p->info;
+template <class Tipo> Tipo* Lista<Tipo>::ObtInfo(Apuntador p) {
+  return &p->info;
 };
 
 template <class Tipo> void Lista<Tipo>::AsigInfo(Apuntador p, Tipo Valor) {

@@ -15,8 +15,8 @@ bool Mesa::InsertarEstudiante(Estudiante estudiante) {
 };
 bool Mesa::RemoverEstudianteByCedula(string cedula) {
   Apunt primero = this->ListaEstudiantes.ObtPrimero();
-  Estudiante primerEstudiante = this->ListaEstudiantes.ObtInfo(primero);
-  if (primerEstudiante.getCedula() == cedula) {
+  Estudiante* primerEstudiante = this->ListaEstudiantes.ObtInfo(primero);
+  if (primerEstudiante->getCedula() == cedula) {
     Apunt apunt = primero;
     Apunt prox = this->ListaEstudiantes.ObtProx(primero);
     this->ListaEstudiantes.AsigPrimero(prox);
@@ -26,8 +26,8 @@ bool Mesa::RemoverEstudianteByCedula(string cedula) {
   Apunt recorrer = primero;
   while (this->ListaEstudiantes.ObtProx(recorrer) != NULL) {
     Apunt prox = this->ListaEstudiantes.ObtProx(recorrer);
-    Estudiante estudiante = this->ListaEstudiantes.ObtInfo(recorrer);
-    if (estudiante.getCedula() == cedula) {
+    Estudiante* estudiante = this->ListaEstudiantes.ObtInfo(recorrer);
+    if (estudiante->getCedula() == cedula) {
       Apunt apunt = prox;
       prox = this->ListaEstudiantes.ObtProx(prox);
       this->ListaEstudiantes.AsigProx(recorrer, prox);
@@ -39,11 +39,11 @@ bool Mesa::RemoverEstudianteByCedula(string cedula) {
   return false;
 };
 
-nodo<Estudiante> *Mesa::BuscarEstudianteByCedula(string cedula) {
-  Apunt ap = this->ListaEstudiantes.ObtPrimero();
+nodo<Estudiante> *Mesa::BuscarEstudianteByCedula(string cedula, Lista<Estudiante> *lm) {
+  Apunt ap = lm->ObtPrimero();
   while (ap != NULL) {
-    Estudiante estudiante = this->ListaEstudiantes.ObtInfo(ap);
-    if (estudiante.getCedula() == cedula) {
+    Estudiante* estudiante = this->ListaEstudiantes.ObtInfo(ap);
+    if (estudiante->getCedula() == cedula) {
       return ap;
     }
     ap = this->ListaEstudiantes.ObtProx(ap);
@@ -51,6 +51,6 @@ nodo<Estudiante> *Mesa::BuscarEstudianteByCedula(string cedula) {
   return ap;
 };
 
-Lista<Estudiante> Mesa::getEstudiantes() const {
-  return this->ListaEstudiantes;
+Lista<Estudiante>* Mesa::getEstudiantes(){
+  return &this->ListaEstudiantes;
 };

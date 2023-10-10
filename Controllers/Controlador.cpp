@@ -189,10 +189,10 @@ void Controlador::ConsultarMesa() {
   ApuntM apM = this->centroV.BuscarMesa(to_string(terminalCedula).back(),
                                         this->centroV.getListaMesas());
   if (apM != NULL) {
-    Mesa m = this->centroV.getListaMesas()->ObtInfo(apM);
+    Mesa* m = this->centroV.getListaMesas()->ObtInfo(apM);
     vc.ImprimirMensaje("\n MESA \n");
     vc.ImprimirChar("Terminal de cedula de la mesa es: ",
-                    m.getTerminalCedula());
+                    m->getTerminalCedula());
     vc.ImprimirMensaje(". \n");
     vc.Pausa();
     return;
@@ -214,22 +214,27 @@ void Controlador::ConsultarEstudianteMesa() {
   }
   ApuntE apE = this->centroV.BuscarEstudianteMesa(cedula, apM);
   if (apE != NULL) {
-    mesa = this->centroV.getListaMesas()->ObtInfo(apM);
-    estudiante = mesa.getEstudiantes().ObtInfo(apE);
-    Pila<Voto> pilaVotos = estudiante.getPilaVotos();
-    vc.ImprimirMensaje("\n Estudiante");
-    vc.ImprimirString("Cedula: ", estudiante.getCedula());
+    Mesa* mes = this->centroV.getListaMesas()->ObtInfo(apM);
+    Estudiante* est = mes->getEstudiantes()->ObtInfo(apE);
+    Pila<Voto> pilaVotos = est->getPilaVotos();
+    vc.ImprimirMensaje("\n Estudiante \n ");
+    vc.ImprimirString("Cedula: ", est->getCedula());
     vc.ImprimirMensaje(". \n");
-    vc.ImprimirString("Nombre: ", estudiante.getNombre());
+    vc.ImprimirString("Nombre: ", est->getNombre());
     vc.ImprimirMensaje(". \n");
-    vc.ImprimirString("Carrera: ", estudiante.getCarrera());
+    vc.ImprimirString("Carrera: ", est->getCarrera());
     vc.ImprimirMensaje(". \n");
-    vc.ImprimirString("Semestre: ", estudiante.getSemestre());
+    vc.ImprimirString("Semestre: ", est->getSemestre());
     vc.ImprimirMensaje("\n Votos");
+    vc.ImprimirMensaje(". \n");
+    if(pilaVotos.Vacia()){
+      vc.ImprimirMensaje("El estudiante no tiene votos");
+    }else 
     while (!pilaVotos.Vacia()) {
       pilaVotos.Remover(voto);
       vc.ImprimirMensaje(voto.getCargo() + '\n');
     }
+    vc.Pausa();
     return;
   }
   vc.ImprimirMensaje("\n El estudiante no esta asignado a la mesa.\n");
@@ -286,6 +291,7 @@ void Controlador::InsertarEstudianteMesa() {
   VCentroVotacion vc = this->vctrV;
   Estudiante est;
   string cedula = vc.LeerString(" Ingrese la cedula del estudiante: ");
+  string ced = cedula;
   char terminalCedula = cedula.back();
   ApuntM apM =
       this->centroV.BuscarMesa(terminalCedula, this->centroV.getListaMesas());
@@ -296,19 +302,23 @@ void Controlador::InsertarEstudianteMesa() {
     return;
   }
   if (this->centroV.BuscarEstudianteMesa(cedula, apM) == NULL) {
-
     string nombre = vc.LeerString(" Ingrese el nombre del estudiante: ");
     string carrera = vc.LeerString(" Ingrese la carrera del estudiante: ");
     string semestre = vc.LeerString(" Ingrese el semestre del estudiante: ");
-    est.setCedula(cedula);
+    est.setCedula(ced);
     est.setNombre(nombre);
     est.setCarrera(carrera);
     est.setSemestre(semestre);
-    if (this->centroV.InsertarEstudianteMesa(est, apM)) {
+    
+    Mesa* m = this->centroV.getListaMesas()->ObtInfo(apM);
+    if(m->InsertarEstudiante(est)){
+      //this->centroV.getListaMesas()->AsigInfo(apM, m);
       vc.ImprimirMensaje("\n El estudiante fue agregado correctamente ");
-    } else
-      vc.ImprimirMensaje(
-          "\n Ocurrio un error al momento de agregar el estudiante ");
+    }
+    else
+    vc.ImprimirMensaje(
+        "\n Ocurrio un error al momento de agregar el estudiante ");
+    
     vc.Pausa();
     return;
   }
@@ -398,8 +408,8 @@ void Controlador::ProcesarEstudianteCola() {
   ApuntM apM =
       this->centroV.BuscarMesa(terminalCedula, this->centroV.getListaMesas());
   ApuntE epE = this->centroV.BuscarEstudianteMesa(est.getCedula(), apM);
-  Mesa m = this->centroV.getListaMesas()->ObtInfo(apM);
-  est = m.getEstudiantes().ObtInfo(epE);
+  Mesa* m = this->centroV.getListaMesas()->ObtInfo(apM);
+  Estudiante* es = m->getEstudiantes()->ObtInfo(epE);
 
   int opc;
   int cargo;
@@ -452,26 +462,26 @@ void Controlador::EstudiantesMesa() {
                                         this->centroV.getListaMesas());
   int count = 0;
   if (apM != NULL) {
-    Mesa m = this->centroV.getListaMesas()->ObtInfo(apM);
-    Lista<Estudiante> le = m.getEstudiantes();
-    ApuntE apE = le.ObtPrimero();
+    Mesa* m = this->centroV.getListaMesas()->ObtInfo(apM);
+    Lista<Estudiante>* le = m->getEstudiantes();
+    ApuntE apE = le->ObtPrimero();
     while (apE != NULL) {
-      Estudiante est = le.ObtInfo(apE);
-      if (!est.getPilaVotos().Vacia()) {
+      Estudiante* est = le->ObtInfo(apE);
+      if (!est->getPilaVotos().Vacia()) {
         count++;
-        vc.ImprimirString("Cedula: ", est.getCedula());
+        vc.ImprimirString("Cedula: ", est->getCedula());
         vc.ImprimirMensaje(". \n");
-        vc.ImprimirString("Nombre: ", est.getNombre());
+        vc.ImprimirString("Nombre: ", est->getNombre());
         vc.ImprimirMensaje(". \n");
-        vc.ImprimirString("Carrera: ", est.getCarrera());
+        vc.ImprimirString("Carrera: ", est->getCarrera());
         vc.ImprimirMensaje(". \n");
-        vc.ImprimirString("Semestre: ", est.getSemestre());
+        vc.ImprimirString("Semestre: ", est->getSemestre());
         vc.ImprimirLineasBlanco(2);
       }
-      apE = le.ObtProx(apE);
+      apE = le->ObtProx(apE);
     }
     vc.ImprimirMensaje("Cantidad de estudiantes que votaron en la mesa" +
-                       to_string(m.getTerminalCedula()) + ": " +
+                       to_string(m->getTerminalCedula()) + ": " +
                        to_string(count));
     vc.Pausa();
   }
@@ -506,13 +516,13 @@ void Controlador::CantidadVotosCargo() {
 
   ApuntM apM = this->centroV.getListaMesas()->ObtPrimero();
   while (apM != NULL) {
-    Mesa m = this->centroV.getListaMesas()->ObtInfo(apM);
-    Lista<Estudiante> le = m.getEstudiantes();
-    ApuntE apE = le.ObtPrimero();
+    Mesa* m = this->centroV.getListaMesas()->ObtInfo(apM);
+    Lista<Estudiante>* le = m->getEstudiantes();
+    ApuntE apE = le->ObtPrimero();
     while (apE != NULL) {
-      Estudiante est = le.ObtInfo(apE);
+      Estudiante* est = le->ObtInfo(apE);
 
-      if (est.BuscarVoto(v)) {
+      if (est->BuscarVoto(v)) {
         count++;
       }
     }

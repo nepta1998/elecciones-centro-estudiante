@@ -20,9 +20,9 @@ public:
   // metodos lista
   bool InsertarEstudiante(Estudiante estudiante);
   bool RemoverEstudianteByCedula(string cedula);
-  Apunt BuscarEstudianteByCedula(string cedula);
+  Apunt BuscarEstudianteByCedula(string cedula, Lista<Estudiante> *lm);
 
-  Lista<Estudiante> getEstudiantes() const;
+  Lista<Estudiante>* getEstudiantes();
 };
 
 #endif // MESA_H
