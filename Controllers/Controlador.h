@@ -25,18 +25,16 @@ public:
   void OpcionMesa();
   void OpcionEstudianteMesa();
   void OpcionEstudianteCola();
-  void OpcionAyuda();
+  void OpcionReportes();
   void OpcionSalir();
 
   // Mesa metodos
   void InsertarMesa();
-  // void IncluirBahia();
   void ConsultarMesas();
   void EliminarMesa();
 
   // Estudiante Mesa
   void InsertarEstudianteMesa();
-  // void IncluirBahia();
   void ConsultarEstudianteMesa();
   void EliminarEstudianteMesa();
 
@@ -47,7 +45,6 @@ public:
   void EliminarEstudianteCola();
 
   // reportes
-  void OpcionReportes();
   void EstudiantesMesa();
   void VotosEstudiante();
   void CantidadVotosCargo();
